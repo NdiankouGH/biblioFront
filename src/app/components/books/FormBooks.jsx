@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import axios from "axios";
-import process from "next/dist/build/webpack/loaders/resolve-url-loader/lib/postcss";
 
 const FormBooks = () => {
     const [formData, setFormData] = useState({
@@ -14,163 +13,77 @@ const FormBooks = () => {
         publisher: '',
         publicationDate: '',
         category: '',
-        totalCopy: '',
-        availableCopy: '',
-
+        totalCopies: '',
+        availableCopies: '',
     });
 
     const [loading, setLoading] = useState(false);
-const [error, setError] = useState(false);
+    const [feedback, setFeedback] = useState(null);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e) => {
-      e.preventDefault();
-      setLoading(true);
+        e.preventDefault();
+        setLoading(true);
+        setFeedback(null);
 
         try {
-        const response = await axios.post(`${process.env.API_URL}/api/books/addBook`, formData, {
-            headers: {"Content-Type": "application/json"},
-        });
-        const data = response.data;
-        console.log(data);
-          alert('Livre ajouté avec succès !');
-          setFormData({   title: '', author: '', description: '', isbn: '', publisher: '', publicationDate: '', category: '', totalCopy: '', availableCopy: '',})
-
-      }catch (e) {
-            alert(`Erreur : ${error.response?.data?.message || "Une erreur est survenue."}`);
-          console.log('Erreur lors de l\'ajout', e.response?.data || e.message);
-
-      }finally {
-          setLoading(false);
-      }
-
+            const response = await axios.post(`http://localhost:8082/api/book/addBook`, formData, {
+                headers: { "Content-Type": "application/json" },
+            });
+            setFeedback({ type: 'success', message: 'Livre ajouté avec succès !' });
+            setFormData({
+                title: '',
+                author: '',
+                description: '',
+                isbn: '',
+                publisher: '',
+                publicationDate: '',
+                category: '',
+                totalCopies: '',
+                availableCopies: '',
+            });
+        } catch (error) {
+            const msg = error.response?.data?.message || 'Erreur lors de l\'ajout.';
+            setFeedback({ type: 'error', message: msg });
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const inputClasses =
-        'mt-1 h-10 px-2 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-300';
+    const inputClasses = 'mt-1 h-10 px-2 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-300';
 
     return (
-        <div className="max-w-lg mx-auto ">
-            <motion.form
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="space-y-6 bg-white p-8 rounded-xl shadow-lg"
-                onSubmit={handleSubmit}
+        <form onSubmit={handleSubmit} className="space-y-4">
+            <input name="title" placeholder="Titre" value={formData.title} onChange={handleChange} required className={inputClasses} />
+            <input name="author" placeholder="Auteur" value={formData.author} onChange={handleChange} required className={inputClasses} />
+            <textarea name="description" placeholder="Description" value={formData.description} onChange={handleChange} required className={`${inputClasses} h-24`} />
+            <input name="isbn" placeholder="ISBN" value={formData.isbn} onChange={handleChange} required className={inputClasses} />
+            <input name="publisher" placeholder="Éditeur" value={formData.publisher} onChange={handleChange} required className={inputClasses} />
+            <input type="date" name="publicationDate" value={formData.publicationDate} onChange={handleChange} required className={inputClasses} />
+            <input name="category" placeholder="Catégorie" value={formData.category} onChange={handleChange} required className={inputClasses} />
+            <input type="number" name="totalCopies" placeholder="Nombre d'exemplaires" value={formData.totalCopies} onChange={handleChange} required className={inputClasses} />
+            <input type="number" name="availableCopies" placeholder="Copies disponibles" value={formData.availableCopies} onChange={handleChange} required className={inputClasses} />
+
+            {feedback && (
+                <div className={`text-sm p-2 rounded ${feedback.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    {feedback.message}
+                </div>
+            )}
+
+            <motion.button
+                type="submit"
+                disabled={loading}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`w-full py-2 px-4 text-white rounded-md shadow ${loading ? 'bg-gray-400' : 'bg-indigo-600 hover:bg-indigo-700'} transition-colors`}
             >
-                {/* Titre */}
-                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
-                    <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-                        Titre
-                    </label>
-                    <input
-                        type="text"
-                        name="title"
-                        id="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        required
-                        className={inputClasses}
-                    />
-                </motion.div>
-
-                {/* Auteur */}
-                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.35 }}>
-                    <label htmlFor="author" className="block text-sm font-medium text-gray-700">
-                        Auteur
-                    </label>
-                    <input
-                        type="text"
-                        name="author"
-                        id="author"
-                        value={formData.author}
-                        onChange={handleChange}
-                        required
-                        className={inputClasses}
-                    />
-                </motion.div>
-
-                {/* Description */}
-                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}>
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                        Description
-                    </label>
-                    <textarea
-                        name="description"
-                        id="description"
-                        rows={3}
-                        value={formData.description}
-                        onChange={handleChange}
-                        required
-                        className="mt-1 px-2 py-2 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-300"
-                    />
-                </motion.div>
-
-                {/* ISBN */}
-                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.45 }}>
-                    <label htmlFor="isbn" className="block text-sm font-medium text-gray-700">
-                        ISBN
-                    </label>
-                    <input
-                        type="text"
-                        name="isbn"
-                        id="isbn"
-                        value={formData.isbn}
-                        onChange={handleChange}
-                        required
-                        className={inputClasses}
-                    />
-                </motion.div>
-
-                {/* Publication Date */}
-                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}>
-                    <label htmlFor="publicationDate" className="block text-sm font-medium text-gray-700">
-                        Date de publication
-                    </label>
-                    <input
-                        type="date"
-                        name="publicationDate"
-                        id="publicationDate"
-                        value={formData.publicationDate}
-                        onChange={handleChange}
-                        required
-                        className={inputClasses}
-                    />
-                </motion.div>
-                {/* Publication Date */}
-                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}>
-                    <label htmlFor="publicationDate" className="block text-sm font-medium text-gray-700">
-                        Nombre d'exmplaire
-                    </label>
-                    <input
-                        type="number"
-                        name="totalCopy"
-                        id="totalCopy"
-                        value={formData.totalCopy}
-                        onChange={handleChange}
-                        required
-                        className={inputClasses}
-                    />
-                </motion.div>
-
-
-                {/* Bouton d'envoi */}
-                <motion.button
-                    type="submit"
-                    disabled={loading}
-                    className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-                        loading ? 'bg-gray-400' : 'bg-indigo-600 hover:bg-indigo-700'
-                    } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                >
-                    {loading ? 'Envoi en cours...' : 'Envoyer'}
-                </motion.button>
-            </motion.form>
-        </div>
+                {loading ? 'Envoi...' : 'Ajouter le livre'}
+            </motion.button>
+        </form>
     );
 };
 
