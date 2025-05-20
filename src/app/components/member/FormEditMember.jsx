@@ -41,7 +41,7 @@ const FormEditMember = ({ selectedMember, onSuccess }) => {
         setLoading(true);
         setFeedback(null);
         try {
-            await axios.put(`http://localhost:8082/api/members/update/${formData.id}`, formData, {
+            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/members/update/${formData.id}`, formData, {
                 headers: { "Content-Type": "application/json" },
             });
             setFeedback({ type: "success", message: "Lecteur mis à jour avec succès." });

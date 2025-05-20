@@ -22,7 +22,7 @@ const FormEditBook = ({ selectedBook, onSuccess }) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await axios.put(`http://localhost:8082/api/book/updateBook`, formData, {
+            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/book/updateBook`, formData, {
                 headers: {"Content-Type": "application/json"},
             });
             setFeedback({ type: "success", message: "Livre modifié avec succès !" });

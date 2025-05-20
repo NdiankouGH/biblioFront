@@ -24,7 +24,7 @@ const  ListMembers = ({searchTerm = ""}) => {
     const fetchMembers = async () => {
         try {
             setIsLoading(true);
-            const response = await axios.get("http://localhost:8082/api/members/listMember");
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/members/listMember`);
             setMembers(response.data);
         } catch (e) {
             console.error("Erreur :", e.response?.data || e.message);
@@ -40,7 +40,7 @@ const  ListMembers = ({searchTerm = ""}) => {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:8082/api/members/delete/${selectedMember.id}`);
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/members/delete/${selectedMember.id}`);
             setDeleteConfirmOpen(false);
             await fetchMembers(); // Rafraîchir la liste après suppression
         } catch (error) {

@@ -26,7 +26,7 @@ const uniqueCategories = [...new Set(books.map(book => book.category))];
     const itemsPerPage = 12;
     const fetchBooks = async () => {
         try {
-            const response = await axios.get('http://localhost:8082/api/book/listBooks');
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/book/listBooks`);
             setBooks(response.data);
         } catch (e) {
             console.error('Erreur :', e.response?.data || e.message);
@@ -36,13 +36,14 @@ const uniqueCategories = [...new Set(books.map(book => book.category))];
         }
     };
 
+
     useEffect(() => {
         fetchBooks();
     }, []);
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:8082/api/book/deleteBook/${selectedBook.id}`);
+            await axios.delete(`${process.env.API_URL}/api/book/deleteBook/${selectedBook.id}`);
             setBooks(prev => prev.filter(book => book.id !== selectedBook.id));
             setDeleteConfirmOpen(false);
         } catch (e) {

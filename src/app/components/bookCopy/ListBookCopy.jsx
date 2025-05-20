@@ -26,7 +26,7 @@ const ListBookCopy = ({ searchTerm = "" }) => {
 
     const fetchBooks = async () => {
         try {
-            const response = await axios.get('http://localhost:8082/api/bookCopy/list');
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/bookCopy/list`);
             setBookCopies(response.data);
         } catch (e) {
             console.error("Erreur :", e.response?.data || e.message);
@@ -56,7 +56,7 @@ const ListBookCopy = ({ searchTerm = "" }) => {
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:8082/api/bookCopy/delete/${selectedBookCopy.id}`);
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/bookCopy/delete/${selectedBookCopy.id}`);
             setDeleteConfirmOpen(false);
             fetchBooks();
         } catch (error) {

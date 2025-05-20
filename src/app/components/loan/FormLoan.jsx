@@ -23,7 +23,7 @@ const FormLoan = () => {
 
     useEffect(() => {
         // Charger uniquement les exemplaires disponibles
-        axios.get('http://localhost:8082/api/bookCopy/list')
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/bookCopy/list`)
             .then((res) => {
                 // Filtrer pour n'avoir que les exemplaires disponibles
                 const availableCopies = res.data.filter(copy => copy.status === "AVAILABLE");
@@ -31,7 +31,7 @@ const FormLoan = () => {
             })
             .catch(console.error);
 
-        axios.get('http://localhost:8082/api/members/listMember')
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/members/listMember`)
             .then((res) => setMembers(res.data))
             .catch(console.error);
     }, []);
@@ -73,7 +73,7 @@ const FormLoan = () => {
         };
 
         try {
-            await axios.post(`http://localhost:8082/api/loan/addLoan`, payload, {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/loan/addLoan`, payload, {
                 headers: { "Content-Type": "application/json" },
             });
             setFeedback({ type: "success", message: "Prêt ajouté avec succès." });

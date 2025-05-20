@@ -27,7 +27,7 @@ const FormMember = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            await axios.post(`http://localhost:8082/api/members/addMember`, formData);
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/members/addMember`, formData);
             setFeedback({ type: "success", message: "Nouveau lecteur ajouté avec succès." });
 
         } catch (error) {

@@ -39,7 +39,7 @@ const FormEditBookCopy = ({ selectedBookCopy, onSuccess }) => {
 
     // Chargement de la liste des livres
     useEffect(() => {
-        axios.get('http://localhost:8082/api/book/listBooks')
+        axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/book/listBooks`)
             .then((res) => setBooks(res.data))
             .catch((err) => console.error('Erreur chargement livres', err));
     }, []);
@@ -58,7 +58,7 @@ const FormEditBookCopy = ({ selectedBookCopy, onSuccess }) => {
         setIsLoading(true);
 
         try {
-            await axios.put(`http://localhost:8082/api/bookCopy/updateBookCopy/${formData.id}`, {
+            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/bookCopy/updateBookCopy/${formData.id}`, {
                 ...formData,
                 bookId: formData.book?.id, // On passe seulement l'id du livre sélectionné
             }, {

@@ -24,7 +24,7 @@ const FormBookCopy = () => {
     useEffect(() => {
         const fetchBooks = async () => {
             try {
-                const res = await axios.get('http://localhost:8082/api/book/listBooks');
+                const res = await axios.get(`${process.env.API_URL}/api/book/listBooks`);
                 setBooks(res.data);
                 console.log(res.data);
             } catch (err) {
@@ -67,7 +67,7 @@ const FormBookCopy = () => {
             });
 
 
-            await axios.post(`http://localhost:8082/api/bookCopy/add`, buildPayload(), {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/bookCopy/add`, buildPayload(), {
                 headers: { "Content-Type": "application/json" },
             });
 

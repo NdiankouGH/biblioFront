@@ -31,7 +31,7 @@ const FormBooks = () => {
         setFeedback(null);
 
         try {
-            const response = await axios.post(`http://localhost:8082/api/book/addBook`, formData, {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/book/addBook`, formData, {
                 headers: { "Content-Type": "application/json" },
             });
             setFeedback({ type: 'success', message: 'Livre ajouté avec succès !' });

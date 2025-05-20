@@ -17,12 +17,12 @@ const ListLoans = ({searchTerm = ""}) => {
     const itemsPerPage = 10;
 
     const fetchMembers = async () => {
-        const res = await axios.get("http://localhost:8082/api/members/listMember");
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/members/listMember`);
         setMembers(res.data);
     };
 
     const fetchLoans = async () => {
-        const res = await axios.get("http://localhost:8082/api/loan/listLoan");
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/loan/listLoan`);
         setLoans(res.data);
     };
 
@@ -89,7 +89,7 @@ const ListLoans = ({searchTerm = ""}) => {
 
     const handleChangeStatus = async (loanId) => {
         try {
-            await axios.put(`http://localhost:8082/api/loan/changeStatus/${loanId}?status=Retourné`)
+            await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/loan/changeStatus/${loanId}?status=Retourné`)
             await fetchMembers();  // recharge tous les membres + leurs emprunts après changement
             await fetchLoans();
             setViewDialogOpen(false);

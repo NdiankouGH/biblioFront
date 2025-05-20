@@ -5,11 +5,14 @@ import ListBookCopy from "@/app/components/bookCopy/ListBookCopy";
 import ListLoans from "@/app/components/loan/ListLoans";
 import {useState} from "react";
 import FormLoan from "@/app/components/loan/FormLoan";
+import AuthCheck from "../components/utils/AuthCheck";
 
 const Loan = () => {
     const [searchTerm, setSearchTerm] = useState("");
 
     return (
+        <AuthCheck>
+
         <div>
             <div className="p-6 space-y-6">
                 {/* En-tête */}
@@ -40,6 +43,7 @@ const Loan = () => {
                 </div>
             </div>
         </div>
+        </AuthCheck>
     )
 }
 export default Loan;
