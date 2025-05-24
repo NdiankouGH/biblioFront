@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import { Combobox } from "@headlessui/react";
 
-const FormLoan = () => {
+const FormLoan = ({ onSuccess }) => {
     const [bookCopies, setBookCopies] = useState([]);
     const [members, setMembers] = useState([]);
     const [bookQuery, setBookQuery] = useState("");
@@ -32,7 +32,8 @@ const FormLoan = () => {
             .catch(console.error);
 
         axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/members/listMember`)
-            .then((res) => setMembers(res.data))
+            .then((res) => setMembers(res.data)
+        )
             .catch(console.error);
     }, []);
 
@@ -66,19 +67,19 @@ const FormLoan = () => {
             return;
         }
 
-        const payload = {
-            ...formData,
-            member: { id: selectedMember.id },
-            bookCopies: selectedBookCopies.map(copy => ({ id: copy.id }))
-        };
-
         try {
+            const payload = {
+                ...formData,
+                member: { id: selectedMember.id },
+                bookCopies: selectedBookCopies.map(copy => ({ id: copy.id }))
+            };
+
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/loan/addLoan`, payload, {
                 headers: { "Content-Type": "application/json" },
             });
             setFeedback({ type: "success", message: "Prêt ajouté avec succès." });
 
-            // reset
+            // reset form
             setFormData({
                 loanDate: "",
                 dueDate: "",
@@ -90,6 +91,12 @@ const FormLoan = () => {
             setSelectedMember(null);
             setBookQuery("");
             setMemberQuery("");
+
+            // Appeler la fonction onSuccess pour rafraîchir la liste
+            if (onSuccess) {
+                onSuccess();
+            }
+
         } catch (error) {
             console.error(error);
             setFeedback({ type: "error", message: "Erreur lors de l'ajout du prêt." });

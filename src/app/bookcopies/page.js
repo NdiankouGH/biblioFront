@@ -1,13 +1,18 @@
 "use client";
 
 import AddDialog from "@/app/components/addDialog";
-import FormBooks from "@/app/components/books/FormBooks";
 import FormBookCopy from "@/app/components/bookCopy/FormBookCopy";
-import {useState} from "react";
+import {useState, useCallback} from "react";
 import ListBookCopy from "@/app/components/bookCopy/ListBookCopy";
 
 const BookCopy = () => {
     const [searchTerm, setSearchTerm] = useState("");
+    const [refreshKey, setRefreshKey] = useState(0);
+
+    const handleRefresh = useCallback(() => {
+        setRefreshKey(prevKey => prevKey + 1);
+    }, []);
+
     return (
         <div>
             <div className="p-6 space-y-6">
@@ -18,7 +23,7 @@ const BookCopy = () => {
                         titleButton="Nouveau exemplaire"
                         description="Remplis les informations ci-dessous."
                     >
-                        <FormBookCopy />
+                        <FormBookCopy onSuccess={handleRefresh} />
                     </AddDialog>
                 </div>
 
@@ -35,7 +40,7 @@ const BookCopy = () => {
 
                 {/* Liste */}
                 <div className="bg-white rounded-lg shadow-md p-4">
-                    <ListBookCopy searchTerm={searchTerm} />
+                    <ListBookCopy searchTerm={searchTerm} key={refreshKey} />
                 </div>
             </div>
         </div>

@@ -38,9 +38,10 @@ export default function ProfilPage() {
             telephone: userData.telephone || "",
             biblioName: userData.biblioName || ""
           });
+          console.log("Formulaire initialisé avec les données utilisateur:", userData);
         }
       } catch (err) {
-        console.error('Erreur lors de l\'initialisation des données:', err);
+        console.error("Erreur lors de l'initialisation des données:", err);
         setError('Erreur lors de la récupération des données utilisateur');
       }
     };
@@ -81,7 +82,7 @@ export default function ProfilPage() {
       });
       setEditMode(false);
     } catch (err) {
-      console.error('Erreur lors de la mise à jour:', err);
+      console.error("Erreur lors de la mise à jour:", err);
       setError('Erreur lors de la mise à jour du profil');
     } finally {
       setLoading(false);
@@ -152,7 +153,7 @@ export default function ProfilPage() {
                       required
                       readOnly
                     />
-                    <p className="text-xs text-gray-400 mt-1">L'email ne peut pas être modifié.</p>
+                    <p className="text-xs text-gray-400 mt-1">L&apos;email ne peut pas être modifié.</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">Nom</label>
@@ -196,7 +197,7 @@ export default function ProfilPage() {
                       className="w-full px-3 py-2 border rounded"
                       readOnly
                     />
-                    <p className="text-xs text-gray-400 mt-1">Le nom de la bibliothèque ne peut pas être modifié.</p>
+                    <p className="text-xs text-gray-400 mt-1">Le nom de la bibliothèque ne peut pas être modifié.</p> 
                   </div>
                 </div>
 
@@ -231,10 +232,7 @@ export default function ProfilPage() {
                   <div className="text-gray-500 text-sm mb-1">Prénom</div>
                   <div className="font-medium">{form.prenom || <span className="italic text-gray-400">Non renseigné</span>}</div>
                 </div>
-                <div>
-                  <div className="text-gray-500 text-sm mb-1">Téléphone</div>
-                  <div className="font-medium">{form.telephone || <span className="italic text-gray-400">Non renseigné</span>}</div>
-                </div>
+              
                 <div>
                   <div className="text-gray-500 text-sm mb-1">Bibliothèque</div>
                   <div className="font-medium">{form.biblioName || <span className="italic text-gray-400">Non renseigné</span>}</div>

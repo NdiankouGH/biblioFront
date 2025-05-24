@@ -9,6 +9,11 @@ import AuthCheck from "../components/utils/AuthCheck";
 
 const Loan = () => {
     const [searchTerm, setSearchTerm] = useState("");
+    const [refreshKey, setRefreshKey] = useState(0);
+
+    const handleRefresh = () => {
+        setRefreshKey(prevKey => prevKey + 1);
+    };
 
     return (
         <AuthCheck>
@@ -22,7 +27,7 @@ const Loan = () => {
                         titleButton="Nouveau emprunt"
                         description="Remplis les informations ci-dessous."
                     >
-                        <FormLoan />
+                        <FormLoan onSuccess={handleRefresh} />
                     </AddDialog>
                 </div>
 
@@ -38,8 +43,8 @@ const Loan = () => {
                 </div>
 
                 {/* Liste */}
-                <div className="bg-white rounded-lg shadow-md p-4">
-                    <ListLoans searchTerm={searchTerm} />
+            <div className="bg-white rounded-lg shadow-md p-4">
+                    <ListLoans searchTerm={searchTerm} key={refreshKey} />
                 </div>
             </div>
         </div>

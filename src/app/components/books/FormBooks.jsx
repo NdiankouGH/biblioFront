@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import axios from "axios";
 
-const FormBooks = () => {
+const FormBooks = ({ onSuccess }) => {
     const [formData, setFormData] = useState({
         title: '',
         author: '',
@@ -31,7 +31,7 @@ const FormBooks = () => {
         setFeedback(null);
 
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/book/addBook`, formData, {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/book/addBook`, formData, {
                 headers: { "Content-Type": "application/json" },
             });
             setFeedback({ type: 'success', message: 'Livre ajouté avec succès !' });
@@ -46,6 +46,11 @@ const FormBooks = () => {
                 totalCopies: '',
                 availableCopies: '',
             });
+            
+            // Appeler la fonction onSuccess pour rafraîchir la liste
+            if (onSuccess) {
+                onSuccess();
+            }
         } catch (error) {
             const msg = error.response?.data?.message || 'Erreur lors de l\'ajout.';
             setFeedback({ type: 'error', message: msg });

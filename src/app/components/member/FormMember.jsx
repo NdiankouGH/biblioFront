@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 
-const FormMember = () => {
+const FormMember = ({ onSuccess }) => {
     const [formData, setFormData] = useState({
         name: "",
         address: "",
@@ -29,6 +29,20 @@ const FormMember = () => {
         try {
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/members/addMember`, formData);
             setFeedback({ type: "success", message: "Nouveau lecteur ajouté avec succès." });
+            
+            // Reset form
+            setFormData({
+                name: "",
+                address: "",
+                phoneNumber: "",
+                registrationDate: "",
+                isActive: true,
+            });
+
+            // Appeler la fonction onSuccess pour rafraîchir la liste
+            if (onSuccess) {
+                onSuccess();
+            }
 
         } catch (error) {
             console.error(error);

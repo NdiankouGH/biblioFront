@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Combobox } from "@headlessui/react";
 import axios from "axios";
 
-const FormBookCopy = () => {
+const FormBookCopy = ({ onSuccess }) => {
     const [loading, setLoading] = useState(false);
     const [books, setBooks] = useState([]);
     const [query, setQuery] = useState("");
@@ -24,7 +24,7 @@ const FormBookCopy = () => {
     useEffect(() => {
         const fetchBooks = async () => {
             try {
-                const res = await axios.get(`${process.env.API_URL}/api/book/listBooks`);
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/book/listBooks`);
                 setBooks(res.data);
                 console.log(res.data);
             } catch (err) {
@@ -66,22 +66,25 @@ const FormBookCopy = () => {
                 }
             });
 
-
             await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/bookCopy/add`, buildPayload(), {
                 headers: { "Content-Type": "application/json" },
             });
 
-
-            setFeedback({ type: "success", message: "Exemplaire ajouté avec succès." });
-            setFormData({
+            setFeedback({ type: "success", message: "Exemplaire ajouté avec succès." });            setFormData({
                 title: '',
                 acquisitionDate: '',
                 conditionRating: '',
                 location: '',
-                status: '',
+                status: 'AVAILABLE',
+                bookId: '',
             });
             setSelectedBook(null);
             setQuery("");
+            
+            // Appeler la fonction onSuccess pour rafraîchir la liste
+            if (onSuccess) {
+                onSuccess();
+            }
 
         } catch (error) {
             console.error('Erreur lors de l\'ajout :', error.response?.data || error.message);

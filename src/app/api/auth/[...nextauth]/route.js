@@ -94,7 +94,7 @@ export const authOptions = {
 
 const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST, authOptions };
+export { handler as GET, handler as POST };
 
 // Export pour utilisation côté serveur
 export async function getSession(ctx) {

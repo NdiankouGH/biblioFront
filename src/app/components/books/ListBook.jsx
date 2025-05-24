@@ -87,7 +87,8 @@ const uniqueCategories = [...new Set(books.map(book => book.category))];
     return (
         <div className="space-y-4">
             {/**Filtres */}
-            <div className="flex justify-between items-center">
+                            <div className="flex justify-between items-center">
+                <h2 className="text-xl font-semibold">Liste des livres</h2> 
                 <Select.Root value={bookAuthor} onValueChange={setBookAuthor}>
                     <Select.Trigger placeholder="Filtrer par auteur" />
                     <Select.Content>
@@ -126,7 +127,7 @@ const uniqueCategories = [...new Set(books.map(book => book.category))];
                 <table className="min-w-full bg-white rounded-lg shadow overflow-hidden">
                     <thead className="bg-gray-100">
                         <tr>
-                            {['Titre', 'Auteur', 'Description', 'ISBN', 'Éditeur', 'Date de publication', 'Catégorie', 'Total', 'Disponibles', 'Actions']
+                            {['Titre', 'Auteur', 'ISBN', 'Éditeur', 'Date de publication', 'Catégorie', 'Total', 'Disponibles', 'Actions']
                                 .map(header => (
                                     <th key={header} className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">{header}</th>
                                 ))}
@@ -138,7 +139,6 @@ const uniqueCategories = [...new Set(books.map(book => book.category))];
                             <tr key={book.id} className="border-b hover:bg-gray-50">
                                 <td className="px-6 py-4">{book.title}</td>
                                 <td className="px-6 py-4">{book.author}</td>
-                                <td className="px-6 py-4 max-w-xs truncate">{book.description}</td>
                                 <td className="px-6 py-4">{book.isbn}</td>
                                 <td className="px-6 py-4">{book.publisher}</td>
                                 <td className="px-6 py-4">{new Date(book.publicationDate).toLocaleDateString()}</td>

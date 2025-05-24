@@ -6,7 +6,13 @@ import FormMember from "@/app/components/member/FormMember";
 import ListMembers from "@/app/components/member/ListMembers";
 
 const Members = () => {
-const [searchTerm, setSearchTerm] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
+    const [refreshKey, setRefreshKey] = useState(0);
+
+    const handleRefresh = () => {
+        setRefreshKey(prevKey => prevKey + 1);
+    };
+
     return (
         <div className="p-6 space-y-6">
             {/* En-tête */}
@@ -16,7 +22,7 @@ const [searchTerm, setSearchTerm] = useState("");
                     titleButton="Nouveau lecteur"
                     description="Remplis les informations ci-dessous."
                 >
-                    <FormMember />
+                    <FormMember onSuccess={handleRefresh} />
                 </AddDialog>
             </div>
 
@@ -33,7 +39,7 @@ const [searchTerm, setSearchTerm] = useState("");
 
             {/* Liste */}
             <div className="bg-white rounded-lg shadow-md p-4">
-                <ListMembers searchTerm={searchTerm} />
+                <ListMembers searchTerm={searchTerm} key={refreshKey} />
             </div>
         </div>
     )
